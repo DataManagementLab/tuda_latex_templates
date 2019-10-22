@@ -1,0 +1,166 @@
+%% This is file `DEMO-TUDaThesis.tex' version 1.20-beta (2019/10/21),
+%% it is part of
+%% TUDa-CI -- Corporate Design for TU Darmstadt
+%% ----------------------------------------------------------------------------
+%%
+%%  Copyright (C) 2018--2019 by Marei Peischl <marei@peitex.de>
+%%
+%% ============================================================================
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%% http://www.latex-project.org/lppl.txt
+%% and version 1.3c or later is part of all distributions of LaTeX
+%% version 2008/05/04 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%%
+%% The Current Maintainers of this work are
+%%   Marei Peischl <tuda-ci@peitex.de>
+%%   Markus Lazanowski <latex@ce.tu-darmstadt.de>
+%%
+%% The development respository can be found at
+%% https://github.com/tudace/tuda_latex_templates
+%% Please use the issue tracker for feedback!
+%%
+%% ============================================================================
+%%
+% !TeX program = lualatex
+%%
+
+\documentclass[
+	ngerman,
+	ruledheaders=section,%Ebene bis zu der die Überschriften mit Linien abgetrennt werden, vgl. DEMO-TUDaPub
+	class=report,% Basisdokumentenklasse. Wählt die Korrespondierende KOMA-Script Klasse
+	thesis={type=bachelor},% Dokumententyp Thesis, für Dissertationen siehe die Demo-Datei DEMO-TUDaPhd
+	accentcolor=9c,% Auswahl der Akzentfarbe
+	custommargins=geometry,% Ränder werden mithilfe von typearea automatisch berechnet
+	marginpar=false,% Kopfzeile und Fußzeile erstrecken sich nicht über die Randnotizspalte
+	BCOR=10mm,%Bindekorrektur, falls notwendig
+	parskip=half-,%Absatzkennzeichnung durch Abstand vgl. KOMA-Sript
+	fontsize=11pt,%Basisschriftgröße laut Corporate Design ist mit 9pt häufig zu klein
+	colorback=false, % Schaltet zwischen dem farbigen Block auf der Titelseite und weißem Hintergrund um
+	bibliography=totoc, % bibliography in toc
+	listof=totoc % list of X in toc
+%	logofile=example-image, %Falls die Logo Dateien nicht vorliegen
+]{tudapub}
+
+%change margins
+\geometry{a4paper}
+
+
+% Der folgende Block ist nur bei pdfTeX auf Versionen vor April 2018 notwendig
+\usepackage{iftex}
+\ifPDFTeX
+\usepackage[utf8]{inputenc}%kompatibilität mit TeX Versionen vor April 2018
+\fi
+
+%%%%%%%%%%%%%%%%%%%
+%Sprachanpassung & Verbesserte Trennregeln
+%%%%%%%%%%%%%%%%%%%
+\usepackage[english, main=english]{babel}
+\usepackage[autostyle]{csquotes}% Anführungszeichen vereinfacht
+\usepackage{microtype}
+
+
+%%%%%%%%%%%%%%%%%%%
+%Literaturverzeichnis
+%%%%%%%%%%%%%%%%%%%
+\usepackage{biblatex}   % Literaturverzeichnis
+\bibliography{bibliography}
+
+
+%%%%%%%%%%%%%%%%%%%
+%Tabellen
+%%%%%%%%%%%%%%%%%%%
+%\usepackage{array}     % Basispaket für Tabellenkonfiguration, wird von den folgenden automatisch geladen
+\usepackage{tabularx}   % Tabellen, die sich automatisch der Breite anpassen
+%\usepackage{longtable} % Mehrseitige Tabellen
+%\usepackage{xltabular} % Mehrseitige Tabellen mit anpassarer Breite
+\usepackage{booktabs}   % Verbesserte Möglichkeiten für Tabellenlayout über horizontale Linien
+\usepackage{multirow}
+\usepackage{ltablex} % combine the features of the tabularx package (auto-sized columns in a fixed width table) with those of the longtable package (multi-page tables).
+
+%%%%%%%%%%%%%%%%%%%
+% Custom packages
+%%%%%%%%%%%%%%%%%%%
+%\usepackage{mathtools} % erweiterte Fassung von amsmath
+%\usepackage{amssymb}   % erweiterter Zeichensatz
+%\usepackage{siunitx}   % Einheiten
+\usepackage[center,labelfont=bf]{caption}
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{acronym}
+
+\usepackage{hyperref} % Hyperlinks
+\usepackage[toc]{appendix} % Appendices (also shown in toc)
+\usepackage{amsthm} %Typesetting theorems
+
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{enumitem}
+
+\usepackage{blindtext} % to generate dummy text for the example
+
+% sets the default path for images
+\graphicspath{{img/}}
+
+%Formatierungen für Beispiele in diesem Dokument. Im Allgemeinen nicht notwendig!
+\let\file\texttt
+\let\code\texttt
+
+\begin{document}
+
+\Metadata{
+	title=Example Title of your Thesis,
+	author=Max Mustermann
+}
+
+\title{Example Title of your Thesis}
+\subtitle{}
+\author[Signature]{Max Mustermann}%optionales Argument ist die Signatur, 
+\reviewer{Prof. Dr. Carsten Binnig \and Gutachter 2}%Gutachter
+
+%Diese Felder erden untereinander auf der Titelseite platziert. 
+%\department ist eine notwendige Angabe, siehe auch dem Abschnitt `Abweichung von den Vorgaben für die Titelseite'
+\department{inf} % Das Kürzel wird automatisch ersetzt und als Studienfach gewählt, siehe Liste der Kürzel im Dokument.
+\institute{Data Management Lab}
+\addTitleBoxLogo{dm_logo}
+\submissiondate{\today}
+\examdate{\today}
+
+%	\tuprints{urn=1234,printid=12345}
+%	\dedication{Für alle, die \TeX{} nutzen.}
+
+\maketitle
+
+% erzeugt eine Selbstständigkeitserklärung mit Unterschriftenzeile.
+\affidavit
+
+% insert abstract before contents
+\input{chapters/Abstract.tex}
+
+% create the table of contents
+\tableofcontents
+
+% List of figures (Abbildungsverzeichnis):
+\listoffigures
+
+\input{chapters/Acronyms.tex}
+\input{chapters/Introduction}
+\input{chapters/Background}
+\input{chapters/Design}
+\input{chapters/Implementation}
+\input{chapters/Evaluation}
+\input{chapters/Conclusion}
+		
+\printbibliography
+
+\input{chapters/Appendix}
+	
+\end{document}

@@ -1,6 +1,4 @@
-# TUDa-CI – Corporate Design LaTeX-Templates for TU Darmstadt
-
- Copyright (C) Marei Peischl <marei@peitex.de>, 2018–2019
+# DM TUDa-CI – Corporate Design LaTeX-Templates for the Data Management Lab at TU Darmstadt
 
  tuda-ci 2019/09/25 v1.20-beta
 
@@ -11,7 +9,18 @@
 
 ***************************************************************************
 
-[Link to the github repository](https://github.com/tudace/tuda_latex_templates)
+This is a customized version of the [official TUDA-CI github repository](https://github.com/tudace/tuda_latex_templates)
+
+The main latex file can be found in the root folder. It is a customized
+version of the `DEMO-TUDaThesis.tex` file in the offical repository. Other TeX files
+should be in the `chapters` folder. Pictures should be added to the
+`img` folder.
+
+Before compiling the project, please download the TU Darmstadt logo file (see below) and run the script `addliceense.sh`.
+Please use `latexmk` to build the project. It should find the style files and compile the latex files correctly.
+
+You can use the script `dm_prepare_tuda.sh` to create a zip file for e.g. uploading a prepared
+project to Overleaf. Please specify the location of the logo file to the script.
 
 [English version below](#summary)
 
