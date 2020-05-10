@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \RequirePackage{expl3}
 \ProvidesExplClass{tudapub}
-	{\filedate}{\fileversion}{Publications using TU Darmstadt's Coporate Desing (TUDa-CI)}
+	{\filedate}{\fileversion}{Publications using TU Darmstadt's Coporate Design (TUDa-CI)}
 
 \RequirePackage{l3keys2e}
 \RequirePackage{URspecialopts}
@@ -14,18 +14,17 @@
 \tl_new:N \g_TUDa_thesis_options_tl
 
 \prop_new:N \g_TUDa_clsopts_prop
-\prop_new:N \g_TUDa_unknown_clsopts_prop 
+\prop_new:N \g_TUDa_unknown_clsopts_prop
 \prop_gput:Nnn \g_TUDa_clsopts_prop {titlepage} {firstiscover}
 \prop_gput:Nnn \g_TUDa_clsopts_prop {captions} {nooneline}
 
 \int_new:N \g_TUDa_ruledheaders_int
 \int_new:N \g_TUDa_paper_int
-
-%Message Declaration for option processing
-\msg_new:nnn {TUDaPub} {titlepage-option-disabled} {
-	You~set~the~titlepage~option~to~#1.\\
-	The~Corporate~Design~guidelines~for~TU~Darmstadt~do~not~support~this~option.\\
-	The~KOMA-Script~option~titlepage~is~forced~to~"firstiscover".
+\msg_new:nnnn {TUDa} {compatibility-only} {
+	You~used~the~outdated~#1~option.\\
+	This~only~exists~due~to~compatibility~reasons.
+}{
+	Please~look~at~tuda-ci~documentation~for~further~information~and~avoid~using~outdated~options.
 }
 
 \bool_new:N \g_TUDa_geometry_bool
@@ -70,16 +69,18 @@
 	},
 	ruledheaders .initial:n = all,
 	type .choices:nn = {publication, thesis} {\tl_gset_eq:NN \g_TUDa_pubType_tl \l_keys_choice_tl},
+	type / intern .code:n = {\keys_set:nn {TUDa/pub}  {titlepage=false, pdfa=false, IMRAD=false}},
 	type .initial:n = publication,
 	unknown .code:n = {\prop_gput:NVn \g_TUDa_unknown_clsopts_prop \l_keys_key_tl {#1}},
 	headline .choice:,
-	headline / true .code:n = \bool_gset_true:N \g_TUDa_headline_bool, 
-	headline / false .code:n = \bool_gset_false:N \g_TUDa_headline_bool, 
+	headline / true .code:n = \bool_gset_true:N \g_TUDa_headline_bool,
+	headline / false .code:n = \bool_gset_false:N \g_TUDa_headline_bool,
 	headline / automark .code:n = {\bool_gset_true:N \g_TUDa_headline_bool \PassOptionsToPackage{automark}{scrlayer-scrpage}},
 	automark .meta:n = {headline=automark},
 	headline .initial:n =false,
 	colorback .bool_gset:N = \g_TUDa_colorback_bool,
 	colorback .initial:n = true,
+	colortitleback .code:n =  \msg_warning:nnx {TUDa} {compatibility-only} {\l_keys_key_tl}\keys_set:nn {TUDa/pub} {logo=head,colorback=false},
 	pdfa .bool_gset:N = \g_TUDa@pdfa_bool,
 	pdfa .initial:n = true,
 	twocolumn .bool_gset:N = \g_TUDa_twocolumn_bool,
@@ -87,7 +88,7 @@
 	twocolumn .initial:n = false,
 	BCOR .code:n = \PassOptionsToPackage{bindingoffset=#1}{geometry},
 	bindingoffset .meta:n = {BCOR=#1},
-	captions .code:n = {\prop_gput:Nnx \g_TUDa_clsopts_prop {captions} {	
+	captions .code:n = {\prop_gput:Nnx \g_TUDa_clsopts_prop {captions} {
 		\use:n {\prop_item:Nn \g_TUDa_clsopts_prop {captions}}, #1}
 	},
 	abstract .code:n = \prop_gput:Nnn \g_TUDa_unknown_clsopts_prop {abstract} {#1},
@@ -98,7 +99,6 @@
 	logo / top .code:n = {\bool_gset_true:N \g_TUDa_logo@inhead_bool},
 	logo / bottom .code:n = {\bool_gset_false:N \g_TUDa_logo@inhead_bool},
 	logo .initial:n = {body},
-	titlepage .code:n = {\msg_warning:nnn {TUDaPub} {titlepage-option-disabled} {#1}},
 	paper .choices:nn = {a0,a1,a2,a3,a4,a5,a6}{
 		\int_gset_eq:NN \g_TUDa_paper_int  \l_keys_choice_int
 		\PassOptionsToPackage{paper=\l_keys_choice_tl}{tudarules}
@@ -113,6 +113,11 @@
 	noinstbox .code:n = {\tl_gput_right:Nn \g_TUDa_thesis_options_tl {,noinstbox=#1}},
 	logofile .tl_gset:N = \g_TUDa_logofile_tl,
 	logofile .initial:n = tuda_logo,
+	title .choice:,
+	title / default .meta:n = {title=large},
+	title / large .code:n = \bool_gset_false:N \g_TUDa_smalltitle_bool,
+	title / small  .code:n = \bool_gset_true:N \g_TUDa_smalltitle_bool,
+	title .initial:n = default,
 }
 %
 %%special option handling grouped values
@@ -135,7 +140,7 @@
 \prop_gput:Nnx \g_TUDa_clsopts_prop {twocolumn} {\bool_if:NTF \g_TUDa_twocolumn_bool {true} {false}}
 
 \prop_map_inline:Nn \g_TUDa_clsopts_prop {
-	\tl_if_empty:nTF {#2} 
+	\tl_if_empty:nTF {#2}
 		{\PassOptionsToClass  {#1} {\g_TUDa_pub_class_tl}}
 		{
 		\clist_map_inline:nn {#2} {\PassOptionsToClass  {#1=##1} {\g_TUDa_pub_class_tl}}
@@ -153,9 +158,9 @@
 
 \prop_map_inline:Nn \g_TUDa_unknown_clsopts_prop {
 	\cs_if_exist:cT {KV@KOMA.\g_TUDa_pub_class_tl.cls@#1} {
-	\tl_if_empty:nTF {#2} 
-		{\KOMAoptions{#1} }
-		{\clist_map_inline:nn {#2} {\KOMAoptions{#1=##1}}}
+	\tl_if_empty:nTF {#2}
+		{\KOMAoptions{#1}}
+		{\KOMAoption{#1}{#2}}
 	}
 }
 
@@ -170,12 +175,12 @@
 }
 \int_compare:nT {\g_TUDa_ruledheaders_int =4 }{
 	\renewcommand*\sectionlinesformat[4]{%
-		\tl_if_eq:nnTF {#1} {section} 
+		\tl_if_eq:nnTF {#1} {section}
 		{
 		\parbox{\linewidth}{
 		\rule[5\g_TUDa_titlerule_dim]{\linewidth}{\g_TUDa_titlerule_dim}\par\nointerlineskip
 		\@hangfrom{%
-			\hskip #2#3}{#4\rule[-\dp\strutbox]{0pt}{\dp\strutbox}\par}\nointerlineskip
+			\hskip #2#3\strut}{#4\rule[-\dp\strutbox]{0pt}{\dp\strutbox}\par}\nointerlineskip
 		\skip_vertical:n {\TUDa_titlerule_sep: -\dp\strutbox}
 		\smash{\rule{\linewidth}{\g_TUDa_titlerule_dim}}}
 		}{
@@ -188,17 +193,17 @@
 	\parbox{\linewidth}{
 		\rule[5\g_TUDa_titlerule_dim]{\linewidth}{\g_TUDa_titlerule_dim}\par\nointerlineskip
 		\@hangfrom{%
-			\hskip #2#3}{#4\rule[-\dp\strutbox]{0pt}{\dp\strutbox}\par}\nointerlineskip
+			\hskip #2#3\strut}{#4\rule[-\dp\strutbox]{0pt}{\dp\strutbox}\par}\nointerlineskip
 			\skip_vertical:n {\TUDa_titlerule_sep: -\dp\strutbox}
 		\smash{\rule{\linewidth}{\g_TUDa_titlerule_dim}}
 	}}
 }
-	
+
 
 \usepackage{tudarules}
 
 
-%,~ subsection,~ 
+%,~ subsection,~
 
 
 %\newcommand{\chapterlineswithprefixformat}[3]{%
@@ -286,7 +291,7 @@
 	\msg_info:nnx {TUDa} {marginpar-no-key} {\g_TUDa_marginpar_tl}
 	\bool_gset_true:N \g_TUDa_marginpar_bool
 	\dim_gset:Nn \g_TUDa_marginpar_dim {\g_TUDa_marginpar_tl}
-} 
+}
 
 
 \dim_new:N \g_TUDa_headheight_dim
@@ -333,26 +338,19 @@
 	}
 
 	\dim_gset:Nn \g_TUDa_headwidth_dim 			  {\paperwidth-\g_TUDa_innerMargin_dim-\g_TUDa_outerMargin_dim-\Gm@bindingoffset}
-	
+
 	\cs_set:Nn \TUDa_disable_marginpar: {\loadgeometry{TUDa@nomarginpar}}
 	\cs_set:Nn \TUDa_restore_typearea: {\loadgeometry{\c_TUDa_default_geometry_tl}}
 
 }{
-\bool_if:NTF \g_TUDa_geometry_bool {
-	\RequirePackage[top=\g_TUDa_topMargin_dim, inner=\g_TUDa_innerMargin_dim, outer=\dim_eval:n {\g_TUDa_outerMargin_dim}, bottom=\g_TUDa_bottomMargin_dim, columnsep= \g_TUDa_columnSep_dim, includehead, includefoot,includemp, nomarginpar, headheight=\g_TUDa_headheight_dim
-	]{geometry}
-	
-	
-	\savegeometry{TUDa@nomarginpar}
-	\cs_set:Nn \TUDa_disable_marginpar: {\loadgeometry{TUDa@nomarginpar}}
-}{
-	\KOMAoptions{headinclude, footinclude, headwidth=text,footwidth=text}
 	\let\TUDa_disable_marginpar:\relax
 	\def\TUDa_restore_typearea:{
-		\KOMAoptions{headinclude, footinclude, headwidth=text,footwidth=text}\recalctypearea
+		\KOMAoptions{headinclude, footinclude}
+		\bool_if:NTF \g_TUDa_marginpar_bool {\KOMAoptions{headwidth=textwithmarginpar,footwidth=textwithmarginpar}}
+		{\KOMAoptions{headwidth=text,footwidth=text}}
+		\recalctypearea
 	}
-}
-%maybe enforce marginar?=false in that case 
+	\TUDa_restore_typearea:
 }
 
 
@@ -373,7 +371,7 @@
 
 
 
-\setkomafont{disposition}{\sffamily\bfseries}
+
 
 
 
@@ -386,10 +384,11 @@
 
 \usepackage{tudacolors}
 
-%TODO: mode -> light head. 
-
+\setkomafont{disposition}{\sffamily\bfseries}
 \setkomafont{pageheadfoot}{\sffamily\small}
 \setkomafont{pagenumber}{}
+\addtokomafont{captionlabel}{\sffamily}
+\addtokomafont{caption}{\sffamily}
 
 
 \KOMAoptions{footsepline=.5\c_TUDa_smallrule_dim}
@@ -424,8 +423,8 @@
 
 \newpairofpagestyles{TUDa}{
 	\KOMAoptions{plainfootsepline}
-	
-	\bool_if:NTF \g_TUDa_marginpar_bool 
+
+	\bool_if:NTF \g_TUDa_marginpar_bool
 		{
 		\KOMAoptions {
 			headwidth=textwithmarginpar,
@@ -439,28 +438,25 @@
 		}
 
 \setkomafont{pagehead}{\Large\bfseries}
-
-
-	\if@twocolumn
-	\edef\sls@evenheadshift{\dim_eval:n {-\marginparwidth-\marginparsep\relax}}
-	\let\sls@oddheadshift\sls@evenheadshift
-	\let\sls@evenfootshift\sls@evenheadshift
-	\let\sls@oddfootshift\sls@evenheadshift
-	\fi
-	\ModifyLayer[
+	\RedeclareLayer[
+		clone=scrheadings.head.above.line,
 		background,
-		mode=picture,
 		contents={
 			\dim_compare:nF {\box_wd:N \TUDa@headline_box=\layerwidth} {
 				\TUDa@makeheadrule*[color=identbarcolor, width=\layerwidth]{TUDa@headline}
 			}
 			\smash{\TUDa@headline}
 		}
-	]{TUDa.head.above.line}	
-	\ModifyLayer[
+	]{TUDa.head.above.line}
+	\RedeclareLayer[
+		clone=plain.scrheadings.head.above.line,
 		background,
-		mode=picture,
-		contents={\smash{\TUDa@headline}}
+		contents={
+			\dim_compare:nF {\box_wd:N \TUDa@headline_box=\layerwidth} {
+				\TUDa@makeheadrule*[color=identbarcolor, width=\layerwidth]{TUDa@headline}
+			}
+			\smash{\TUDa@headline}
+		}
 	]{plain.TUDa.head.above.line}
 	\bool_if:NT \g_TUDa_headline_bool {
 		\clist_map_variable:nNn {oneside, even, odd} \l_tmpa_tl {
@@ -496,10 +492,10 @@
 \tl_gset_eq:NN  \g_TUDa_titleimage_code_tl \c_empty_tl
 \newcommand{\titleimage}[1]{\tl_gset:Nn \g_TUDa_titleimage_code_tl {#1}}
 
-\box_new:N  \g_TUDa_title_box 
+\box_new:N  \g_TUDa_title_box
 \skip_new:N \g_TUDa_title_fill_skip
 
-\renewcommand{\titlepagestyle}{title.TUDa}
+\renewcommand{\titlepagestyle}{TUDa}
 
 
 \seq_new:N \g_TUDa_author_seq
@@ -524,7 +520,10 @@
 }
 
 \renewcommand*{\@author}{
-	\seq_use:Nnnn \g_TUDa_author_seq {~\authorandname{}~} {,~} {~\&~}
+  \begingroup
+  \hyphenpenalty=100000
+  \seq_use:Nnnn \g_TUDa_author_seq {~\authorandname{}~} {,~} {~\&~}
+  \endgroup
 }
 
 \msg_new:nnn {TUDaPub} {infobox-too-high} {
@@ -555,7 +554,7 @@
 		addvoffset=\dim_eval:n {\box_ht:N \TUDa@headline_box+\box_dp:N \TUDa@headline_box-\g_TUDa_titlerule_dim},
 		height={\box_ht:N \g_TUDa_title_box+ \g_TUDa_title_fill_skip+.5\c_TUDa_logoheight_dim}
 		]{title.TUDa.background}
-		
+
 		\AddLayersToPageStyle{title.TUDa}{title.TUDa.background}
 	}
 
@@ -572,9 +571,9 @@
 	}}
 	\nointerlineskip
 	\TUDa_Setup_Title_box:
-	
+
 	\bool_if:NT \g_TUDa_logo@inhead_bool {
-		\dim_compare:nT {\box_ht:N \g_TUDa_title_info_box+ \box_dp:N \g_TUDa_title_info_box  > \box_ht:N \g_TUDa_title_box} 
+		\dim_compare:nT {\box_ht:N \g_TUDa_title_info_box+ \box_dp:N \g_TUDa_title_info_box  > \box_ht:N \g_TUDa_title_box}
 			{\msg_warning:nn {TUDaPub} {infobox-too-high}}
 		\makebox[\linewidth][r]{\smash{
 				\raisebox{-\height}{
@@ -597,57 +596,13 @@
 \setkomafont{author}{}
 \setkomafont{date}{}
 
-%TODO finish font setup
-
-\int_case:nn {\g_TUDa_paper_int}
-{
-	%paper=a0
-	{1} {
-		\cs_set:Nn \TUDa_title_fontsize: {{125pt}{165pt}}
-		\cs_set:Nn \TUDa_titleinfo_fontsize: {{42pt}{55pt}}
-		\cs_set:Nn \TUDa_titlethanks_fontsize: {{28pt}{35pt}}
-	}
-	%paper=a1
-	{2} {
-		\cs_set:Nn \TUDa_title_fontsize: {{86pt}{120pt}}
-		\cs_set:Nn \TUDa_titleinfo_fontsize: {{35pt}{42pt}}
-		\cs_set:Nn \TUDa_titlethanks_fontsize: {{22pt}{26pt}}
-	}
-	%paper=a2
-	{3} {
-		\cs_set:Nn \TUDa_title_fontsize: {{65pt}{82pt}}
-		\cs_set:Nn \TUDa_titleinfo_fontsize: {{22pt}{28pt}}
-		\cs_set:Nn \TUDa_titlethanks_fontsize: {{14pt}{20pt}}
-	}
-	%paper=a3
-	{4} {
-		\cs_set:Nn \TUDa_title_fontsize: {{47pt}{61pt}}
-		\cs_set:Nn \TUDa_titleinfo_fontsize: {{16pt}{20pt}}
-		\cs_set:Nn \TUDa_titlethanks_fontsize: {{12pt}{16pt}}
-	}
-	%paper=a4
-	{5} {
-		\cs_set:Nn \TUDa_title_fontsize: {{36pt}{47pt}}
-		\cs_set:Nn \TUDa_titleinfo_fontsize: {{12pt}{14pt}}
-		\cs_set:Nn \TUDa_titlethanks_fontsize: {{10pt}{11.5pt}}
-	}
-	%paper=a5
-	{6} {
-		\cs_set:Nn \TUDa_title_fontsize: {{22pt}{28pt}}
-		\cs_set:Nn \TUDa_titleinfo_fontsize: {{10pt}{11.5pt}}
-		\cs_set:Nn \TUDa_titlethanks_fontsize: {{10pt}{11.5pt}}
-	}
-	%paper=a6
-	{7} {
-		\cs_set:Nn \TUDa_title_fontsize: {{14pt}{16pt}}
-		\cs_set:Nn \TUDa_titleinfo_fontsize: {{9pt}{10pt}}	
-		\cs_set:Nn \TUDa_titlethanks_fontsize: {{9pt}{10pt}}
-	}
+\bool_if:NF \g_TUDa_smalltitle_bool {
+	\int_gdecr:N \g_TUDa_paper_int
 }
+\file_input:n {tuda-a\int_use:N \g_TUDa_paper_int paper.clo}
+\TUDa_setup_title_sizes:
 
-
-
-\seq_new:N \g_TUDa_title_info_seq 
+\seq_new:N \g_TUDa_title_info_seq
 \box_new:N \g_TUDa_title_info_box
 
 \colorlet{TUDa@InfoBoxColor}{white}
@@ -692,7 +647,7 @@
 			\dim_set:Nn \l_tmpa_dim {2\c_TUDa_logoheight_dim/3}
 			\dim_compare:nTF {\box_ht:N \l_tmpa_box > \l_tmpa_dim}
 			{\includegraphics[width=\l_tmpa_dim]{#2}}
-			{\box_use:N \l_tmpa_box} 
+			{\box_use:N \l_tmpa_box}
 	 	}
 		}
 	}
@@ -702,7 +657,7 @@
 
 \DeclareNewLayer[textarea,background,mode=picture,
 	contents={
-		\tl_if_empty:NTF \g_TUDa_titleimage_code_tl 
+		\tl_if_empty:NTF \g_TUDa_titleimage_code_tl
 		{\bool_if:NT \g_TUDa_colorback_bool {\putLL{\color{identbarcolor}\rule{\layerwidth}{\layerheight}}}}
 		{\putUL{\color{identbarcolor}\raisebox{-\height}{\parbox[t]{\textwidth}{
 					\let\width\layerwidth
@@ -712,12 +667,12 @@
 		\bool_if:NF \g_TUDa_logo@inhead_bool {
 			\put(\dim_to_decimal_in_unit:nn {\layerwidth-2.2\c_TUDa_logoheight_dim
 			} {\unitlength},
-			\dim_to_decimal_in_unit:nn {\layerheight-\box_ht:N \g_TUDa_title_info_box - .5\c_TUDa_logoheight_dim} {\unitlength}){	
+			\dim_to_decimal_in_unit:nn {\layerheight-\box_ht:N \g_TUDa_title_info_box - .5\c_TUDa_logoheight_dim} {\unitlength}){
 				\rlap{\box_use:N \g_TUDa_title_info_box}
 			}
 		}
 		\put(0,0){\rule{\linewidth}{\g_TUDa_titlerule_dim}}
-	}              
+	}
 ]{title.TUDa.image}
 
 \DeclareNewLayer[textarea,background,mode=picture,
@@ -746,7 +701,7 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 	\hbox_gset:Nn \g_TUDa_title_info_box
 	{
 		\parbox{\dimexpr2.5\c_TUDa_logoheight_dim}{
-		\seq_use:Nn \g_TUDa_title_info_seq  {\par\nointerlineskip\vspace{5mm}}
+		\seq_use:Nn \g_TUDa_title_info_seq  {\par\nointerlineskip\vspace{\dim_eval:n {\c_TUDa_largerule_dim+\c_TUDa_rulesep_dim}}}
 		}
 	}
 }
@@ -767,15 +722,15 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 
 	\PassOptionsToPackage{a-2b}{pdfx}
 	\RequirePackage{pdfx}
-	
+
 	\sys_if_engine_pdftex:T {
 		\msg_warning:nnn {TUDaPub} {prefer-lualatex} {PDFTeX}
 	}
-	
+
 	\sys_if_engine_pdftex:T {
 		\msg_warning:nnn {TUDaPub} {prefer-lualatex} {XeTeX}
 	}
-	
+
 
 
 	\@ifpackagelater{pdfx}{2018/12/01}{
@@ -786,20 +741,20 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 		}{See~DEMO-TUDaPub~for~further~information.}
 		\msg_error:nn {TUDaPub} {outdated-pdfx}
 	}
-	
-	
+
+
 	%%hyperref
 	\hypersetup{hidelinks, unicode}
 	\iow_new:N \TUDa@xmpdata_stream
 	\tl_new:N \g_TUDa@xmp_title_tl
 	\tl_new:N \g_TUDa@xmp_author_tl
-	
+
 	\cs_if_exist:NF \prop_gput_if_new:Nnx {
 	\cs_generate_variant:Nn \prop_gput_if_new:Nnn {Nnx}
 	}
 
 	\cs_if_exist:NF \tl_to_str:V {\cs_generate_variant:Nn \tl_to_str:N {V}}
-	
+
 	\cs_new:Nn \TUDa_pass_TitleData: {
 		\iow_open:Nn \TUDa@xmpdata_stream {\jobname.xmpdata}
 		\begingroup
@@ -810,8 +765,11 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 		\use:c {Hy@pdfstringtrue}
 		\tl_gset:Nf \g_TUDa@xmp_title_tl {\@title}
 		\prop_gput_if_new:Nnx \g_TUDa_MetaData_prop {title} {\tl_to_str:V \g_TUDa@xmp_title_tl}
-		\tl_gset:Nf \g_TUDa@xmp_author_tl {\@author}
-		\prop_gput_if_new:Nnx \g_TUDa_MetaData_prop {author} {\tl_to_str:V \g_TUDa@xmp_author_tl}
+		\prop_if_in:NnF \g_TUDa_MetaData_prop {author} {
+			\tl_gset:Nx \g_TUDa@xmp_author_tl {\seq_use:Nn \g_TUDa_author_seq {\exp_not:N \sep}}
+			\tl_gset:Nx \g_TUDa@xmp_author_tl {\g_TUDa@xmp_author_tl}
+			\prop_gput:Nnx \g_TUDa_MetaData_prop {author} {\tl_to_str:V \g_TUDa@xmp_author_tl}
+		}
 		\prop_gput_if_new:Nnn \g_TUDa_MetaData_prop {publisher}{TU~Darmstadt}
 		\prop_gput_if_new:Nnn \g_TUDa_MetaData_prop {creator}{LaTeX~using~TUDa-CI}
 		\use:c {pdfx@localcommands}%should be held inside group
@@ -819,12 +777,22 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 	\endgroup
 	\iow_close:N \TUDa@xmpdata_stream
 	}
-	\cs_new:Nn \TUDa_write_xmp_line:nn {	
+	\cs_new:Nn \TUDa_write_xmp_line:nn {
 		\begingroup
 		\cs_set:Npn \sep {\exp_not:N \sep}
-		\cs_if_exist:cTF {\tl_mixed_case:n {#1}} {
+		%Fallback test for older kernels
+		\cs_if_exist:NTF \str_uppercase:f {
+			\tl_set:Nx \l_tmpa_tl {
+				\str_uppercase:f {\tl_head:n {#1}}
+				\str_lowercase:f { \tl_tail:n {#1}}
+			}
+		} {
+			%may be removed in some time
+			\tl_set:Nx \l_tmpa_tl {\tl_mixed_case:n {#1}}
+		}
+		\cs_if_exist:cTF {\l_tmpa_tl}{
 			\iow_now:Nx \TUDa@xmpdata_stream {
-				\c_backslash_str \tl_mixed_case:n {#1} {#2}
+				\c_backslash_str \l_tmpa_tl {\exp_not:n {#2}}
 			}
 		}{
 			\msg_error:nnn {TUDaPub} {unknown-metadata} {#1}
@@ -833,16 +801,16 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 	}
 
 \prop_new:N \g_TUDa_MetaData_prop
-	
+
 	\newcommand*{\Metadata}[1]{
-		\keyval_parse:NNn  \use_none:n \TUDa_set_metadata_prop:nn 
+		\keyval_parse:NNn  \use_none:n \TUDa_set_metadata_prop:nn
 		{#1}
 	}
-	
+
 	\cs_set:Nn \TUDa_set_metadata_prop:nn {
 	\exp_args:NNf \prop_gput:Nnn \g_TUDa_MetaData_prop {\tl_lower_case:n{#1}}  {#2}
 	}
-	
+
 	\msg_new:nnnn {TUDaPub} {unknown-metadata} {
 	You~ used~ the~ #1~ metadata~ entry.\\
 	I~ don't~ know~ how~ to~ handle~ that.\\
@@ -853,7 +821,7 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 	\msg_info:nn {tudaPub} {no-pdfa}
 	%%hyperref
 	\RequirePackage[hidelinks, unicode]{hyperref}
-	
+
 	\newcommand{\Metadata}[1]{\ClassError{tudapub}{You~cannot~use~\string\Metadata\ ~with~pdfa=false.}{}}
 \fi:
 
@@ -878,14 +846,13 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 \textsuperscript{\@fnsymbol{#1}}#2
 }
 
-
-
-
+% The following macro is an adapted version of the corresponding KOMA-Script macro
+% Copyright (c) 1994-2019 Markus Kohm [komascript at gmx info]
 \renewcommand*{\maketitle}[1][1]{
 	\def\and{,~ }
 	\cs_if_exist_use:N \TUDa_pass_TitleData:
+	\if@titlepage
 	\TUDa_disable_marginpar:
-	\cleardoublepage
 	\begin{titlepage}
 		\setcounter{page}{%
 			#1%
@@ -924,6 +891,7 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 		\hbox_gset:Nn \g_TUDa_title_box {
 			\parbox[t]{\linewidth}{
 				\begin{minipage}[b]{\bool_if:NT \g_TUDa_logo@inhead_bool {.75}\linewidth}
+					\bool_if:NT \g_TUDa_logo@inhead_bool {\color{textonaccentcolor}}
 					\begin{addmargin}{3mm}
 						\raggedright
 						\tl_if_empty:NF \@titlehead {\usekomafont{titlehead}{\@titlehead\par}}
@@ -961,11 +929,11 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 				\let\@thanks\@empty
 			}
 			\rule{\linewidth}{\g_TUDa_titlerule_dim}\par}
-		
+
 		}
-			
+
 		\TUDa_adjust_titlepage_style:
-		
+
 
 		\nointerlineskip\box_use:N \g_TUDa_title_box
 		\par
@@ -1005,10 +973,136 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 	\cleardoublepage
 	\TUDa_restore_typearea:
 	\aftergroup\TUDa_restore_typearea:
+	\else
+	\par
+	\@tempcnta=%
+	#1%
+	\relax\ifnum\@tempcnta=1\else
+	\ClassWarning{\KOMAClassName}{%
+		Optional argument of \string\maketitle\space ignored\MessageBreak
+		in `titlepage=false' mode%
+	}%
+	\fi
+	\ifx\@uppertitleback\@empty\else
+	\ClassWarning{\KOMAClassName}{%
+		non empty \string\uppertitleback\space ignored
+		by \string\maketitle\MessageBreak
+		in `titlepage=false' mode%
+	}%
+	\fi
+	\ifx\@lowertitleback\@empty\else
+	\ClassWarning{\KOMAClassName}{%
+		non empty \string\lowertitleback\space ignored
+		by \string\maketitle\MessageBreak
+		in `titlepage=false' mode%
+	}%
+	\fi
+	\begingroup
+	\let\titlepage@restore\relax
+	\def\thefootnote{\fnsymbol{footnote}}
+	\next@tdpage
+		\ifx\@extratitle\@empty
+			\ifx\@frontispiece\@empty\else \mbox{}\fi
+		\else
+		\@makeextratitle
+		\fi
+		\ifx\@frontispiece\@empty
+		\ifx\@extratitle\@empty\else\next@tdpage\fi
+		\else
+		\next@tpage
+		\@makefrontispiece
+		\next@tdpage
+		\fi
+	\@maketitle
+	\ifx\titlepagestyle\@empty\else\thispagestyle{\titlepagestyle}\fi
+	\@thanks\global\let\@thanks\@empty
+	\endgroup
+	\fi
 }
 
 
 }
+
+\renewcommand*{\@maketitle}{%
+	\global\@topnum=\z@
+	\setparsizes{\z@}{\z@}{\z@\@plus 1fil}\par@updaterelative
+	\vspace*{-\dim_eval:n {
+			\headheight
+			+\headsep
+			+\topskip
+			-\box_ht:N\TUDa@headline_box
+			-\box_dp:N \TUDa@headline_box
+%			-\dp\strutbox
+	}}
+	\par
+	\nointerlineskip
+	\begingroup
+	\usekomafont{disposition}
+	\hsize=\g_TUDa_headwidth_dim
+	\raisebox{\dim_eval:n {
+			-.5\c_TUDa_logoheight_dim
+	}}[0pt][.5\c_TUDa_logoheight_dim]{
+		\bool_if:NT \g_TUDa_colorback_bool {\color{accentcolor}\rule{\g_TUDa_headwidth_dim}{.5\c_TUDa_logoheight_dim}}
+	}
+	\par\nointerlineskip
+	\setlength{\fboxsep}{\z@}
+	\bool_if:NT \g_TUDa_colorback_bool {\colorbox{accentcolor}}{\parbox[t]{\g_TUDa_headwidth_dim}{
+			\raisebox{-\height}{%
+				\begin{minipage}[t]{\dimexpr\linewidth-2.2\c_TUDa_logoheight_dim-1ex}
+					\bool_if:NT \g_TUDa_colorback_bool  {\begin{addmargin}{.5\c_TUDa_largerule_dim}}
+						\raggedright
+						\bool_if:NT \g_TUDa_colorback_bool {\color{textonaccentcolor}}
+						\tl_if_empty:NF \@titlehead {\usekomafont{titlehead}{\@titlehead\par}}
+						\leavevmode
+						{\Huge\usekomafont{title}{
+						\Huge
+						\@title \par
+						}}%
+						\vskip 1em
+						\bool_if:NTF \g_TUDa_colorback_bool {\end{addmargin}} {\par}
+			\vspace{\dim_eval:n {\c_TUDa_largerule_dim+\c_TUDa_rulesep_dim}}
+			\end{minipage}
+		}
+		\hfill
+		\raisebox{-\height}{
+		\TUDa_Setup_Title_box:
+		\makebox[2.2\c_TUDa_logoheight_dim][l]{
+		\box_use:N \g_TUDa_title_info_box
+		}
+		}
+		\dim_compare:nNnTF {\box_ht:N \g_TUDa_title_info_box + \box_ht:N \g_TUDa_title_info_box} > {1.1\c_TUDa_logoheight_dim}
+				{\vspace{\c_TUDa_largerule_dim}}
+				{\vspace{.5\c_TUDa_logoheight_dim}}
+
+		\par
+	}}
+	\par
+	\nointerlineskip
+	\rule{\g_TUDa_headwidth_dim}{\g_TUDa_titlerule_dim}
+	\begin{addmargin}{.5\c_TUDa_largerule_dim}
+	\Large
+	\clist_map_inline:nn {subtitle, subject, author, date, publishers}
+		{\tl_if_empty:cF {@##1} {{\usekomafont{##1}\use:c {@##1}\par}}}
+	\vspace{\c_TUDa_rulesep_dim}
+	\end{addmargin}
+	\tl_if_empty:NF \@thanks {
+	\par\nointerlineskip
+	\rule{\g_TUDa_headwidth_dim}{\g_TUDa_titlerule_dim}
+	\expandafter\fontsize\TUDa_titlethanks_fontsize:\selectfont
+	\begin{addmargin}{.5\c_TUDa_largerule_dim}
+		\let\footnotetext\TUDa@title@footnote
+		\@thanks
+		\vspace{\c_TUDa_rulesep_dim}
+	\end{addmargin}
+	\par
+	\let\@thanks\@empty
+	}
+	\par\nointerlineskip
+		\rule{\g_TUDa_headwidth_dim}{\g_TUDa_titlerule_dim}
+	\par
+	\endgroup
+	\vskip .5\c_TUDa_logoheight_dim
+}%
 
 %%Abstract anpassungen mit Sprache
 \providecommand{\abstract}{}% für book
@@ -1024,15 +1118,15 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 	}
 	\bool_if:NT \l_tmpa_bool {
 		\scr@ifundefinedorrelax{chapter}{%
-			\iftocfeature{toc}{leveldown}
+			\Iftocfeature{toc}{leveldown}
 			{\subsection*}
 			{\section*}
 		}{
-			\iftocfeature{toc}{leveldown}
+			\Iftocfeature{toc}{leveldown}
 			{\section*}
 			{\chapter*}
 		} {\abstractname}
-		
+
 }}{
 	\endgroup
 }
@@ -1040,12 +1134,12 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 
 %Anpassungen marginpar
 \cs_set_eq:NN\TUDa_orig@marginpar:\marginpar
-\newkomafont{marginpar}{\color{textaccentcolor}\accentfont}
+\newkomafont{marginpar}{\accentfont\color{textaccentcolor}}
 \RenewDocumentCommand{\marginpar}{om}{
 	\IfNoValueTF{#1}{
-		\TUDa_orig@marginpar:{\usekomafont{marginpar}#2}
+		\TUDa_orig@marginpar:{\leavevmode\usekomafont{marginpar}#2}
 	}{
-		\TUDa_orig@marginpar:[\usekomafont{marginpar}#1]{\usekomafont{marginpar}#2}
+		\TUDa_orig@marginpar:[\leavevmode\usekomafont{marginpar}#1]{\leavevmode\usekomafont{marginpar}#2}
 	}
 }
 
@@ -1055,12 +1149,12 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 
 
 \providecommand*{\frontmatter}{
-	\if@twoside\cleardoublepage\else\clearpage\fi \@mainmattertrue 
+	\if@twoside\cleardoublepage\else\clearpage\fi \@mainmattertrue
 	\pagenumbering {roman}
 }
 
 \providecommand*{\mainmatter}{
-	\if@twoside\cleardoublepage\else\clearpage\fi \@mainmattertrue 
+	\if@twoside\cleardoublepage\else\clearpage\fi \@mainmattertrue
 	\pagenumbering {arabic}
 }
 
@@ -1069,7 +1163,7 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 }
 
 
-%IMRAD:Introduction 
+%IMRAD:Introduction
 \seq_if_exist:NTF \seq_const_from_clist:Nn {
 	\seq_const_from_clist:Nn \c_TUDa_IMRAD_seq {introduction, methods, results, discussion}
 } {
@@ -1089,7 +1183,7 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 		\seq_map_inline:Nn \c_TUDa_IMRAD_seq {
 			\cs_if_exist:cF {r@IMRAD:#1} {
 			\msg_warning:nnn {TUDaPub}{missing-IMRADlabel} {#1}
-			}	 
+			}
 	 	}
 	}
 }
@@ -1106,6 +1200,10 @@ contents={\color{identbarcolor}\rule{\layerwidth}{\layerheight}}
 	Either~you~need~to~recompile~your~document~or~add~a~label~using~\string\IMRADlabel.
 }
 
+%backwards compatibility for KOMA-Script
+\cs_if_exist:NF \Iftocfeature{
+	\let\Iftocfeature\iftocfeature
+}
 
 \endinput
 %End of class tudapub.cls

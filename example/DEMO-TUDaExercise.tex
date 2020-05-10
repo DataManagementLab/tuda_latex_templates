@@ -1,7 +1,7 @@
 \documentclass[
 	ngerman,
 	]{tudaexercise}
-	
+
 \usepackage[english, main=ngerman]{babel}
 \usepackage[babel]{csquotes}
 
@@ -23,7 +23,7 @@
 \let\unit\relax
 
 \begin{document}
-	
+
 \title[Übung TUDaExercise]{Übung zur Benutzung der TUDaExercise-Klasse}
 \author{Marei Peischl}
 \term{Sommersemester 2042}
@@ -89,14 +89,14 @@ Es existiert nun eine Unterscheidung zwischen linken und rechten Seiten, sofern 
 }
 \end{verbatim}
 
-Einstellungen, die gleiche Felder betreffen überschreiben sich gegenseitig.
+Einstellungen, die gleiche Felder betreffen, überschreiben sich gegenseitig.
 
 \begin{subtask}[Freie Inhalte]
 Die Inhalte sind frei wählbar und werden automatisch in einer Box mit der gleichen Breite, wie der Text gesetzt. Der Inhalt wird linksbündig platziert. Es ist möglich Grafiken oder Tabellen innerhalb dieser Box zu platzieren.
 \end{subtask}
 
 \begin{subtask}[Vorgefertigte Elemente]
-Für die Kopfzeilen existieren  einige vorgefertigte Elemente, die dort platziert werden können.
+Für die Kopfzeilen existieren einige vorgefertigte Elemente, die dort platziert werden können.
 \begin{verbatim}
 	\ShortTitle
 	\StudentID
@@ -138,6 +138,20 @@ Die Voreinstellung ist \code{solution=false}.
 Beispiel für einen Lösungsvorschlag
 \end{solution}
 
+\end{task}
+
+\begin{task}[credit=10]{Punkte}
+Punkteangaben sind über den Optionsschlüssel \code{credit} möglich. Der Wert wird hinter den Aufgabentitel in runde Klammern gesetzt. Dies geschieht mithilfe des Makros \code{\tbs{}creditformat}
+
+Alternativ existiert der Schlüssel \code{points} dieser ergänzt zusätzlich zur Angabe auch den Text \code{\tbs{}PointName} bzw. \code{\tbs{PointsName}} je nachdem ob der Wert größer 1 oder nicht. Der Schlüssel \code{points} akzeptiert daher nur numerische Werte.
+\begin{subtask}[points=1,title=Beispiel für den Schlüssel points]
+Da ältere Versionen von TUDaExercise keine Optionsverarbeitung für subtask erlaubten, ist hier ein zusätzlicher Mechanismus enthalten. Falls sowohl ein Titel, als auch spezifische Angaben notwendig sind, existiert hier zusätzlich der Schlüssel \code{title}.
+Geprüft wird darauf, ob das Argument ein Gleichheitszeichen enthält, ist dies der Fall, so wird davon ausgegangen, dass Optionen nach Schlüssel=Wert-Struktur übergeben werden.
+\end{subtask}
+
+\begin{subtask}[Fallback-Modus, falls ein = im Titel detektiert wird, aber keine Zuweisung möglich ist.]
+Falls bei der Optionsverarbeitung Unstimmigkeiten festgestellt werden, so wird das gesamte Argument als Titel verarbeitet.
+\end{subtask}
 \end{task}
 
 \begin{task}{Kompatibilitätsmodus}

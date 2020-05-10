@@ -16,7 +16,7 @@
 % Der folgende Block ist nur bei pdfTeX auf Versionen vor April 2018 notwendig
 \usepackage{iftex}
 \ifPDFTeX
-\usepackage[utf8]{inputenc}%kompatibilität mit TeX Versionen vor April 2018
+	\usepackage[utf8]{inputenc}%kompatibilität mit TeX Versionen vor April 2018
 \fi
 
 %%%%%%%%%%%%%%%%%%%
@@ -35,7 +35,7 @@
 
 
 %%%%%%%%%%%%%%%%%%%
-%Tabellen
+%Paketvorschläge Tabellen
 %%%%%%%%%%%%%%%%%%%
 %\usepackage{array}     % Basispaket für Tabellenkonfiguration, wird von den folgenden automatisch geladen
 \usepackage{tabularx}   % Tabellen, die sich automatisch der Breite anpassen
@@ -50,31 +50,29 @@
 %\usepackage{amssymb}   % erweiterter Zeichensatz
 %\usepackage{siunitx}   % Einheiten
 
-
-
 %Formatierungen für Beispiele in diesem Dokument. Im Allgemeinen nicht notwendig!
 \let\file\texttt
 \let\code\texttt
+\let\tbs\textbackslash
 
 \usepackage{pifont}% Zapf-Dingbats Symbole
 \newcommand*{\FeatureTrue}{\ding{52}}
 \newcommand*{\FeatureFalse}{\ding{56}}
 
-
 \begin{document}
 
 \Metadata{
-	title=TUDaThesis -- Template für Abschlussarbeiten im CD der TU Darmstadt,
+	title=TUDaThesis - Abschlussarbeiten im CD der TU Darmstadt,
 	author=Marei Peischl
 }
 
-\title{\LaTeX{} im Corporate Design der TU Darmstadt}
+\title{TUDaThesis -- Abschlussarbeiten im CD der TU Darmstadt}
 \subtitle{\LaTeX{} using TU Darmstadt's Corporate Design}
-\author[M. Peischl]{Marei Peischl}%optionales Argument ist die Signatur, 
+\author[M. Peischl]{Marei Peischl}%optionales Argument ist die Signatur,
 \birthplace{Geburtsort}%Geburtsort, bei Dissertationen zwingend notwendig
 \reviewer{Gutachter 1 \and Gutachter 2 \and noch einer \and falls das immernoch nicht reicht}%Gutachter
 
-%Diese Felder erden untereinander auf der Titelseite platziert. 
+%Diese Felder erden untereinander auf der Titelseite platziert.
 %\department ist eine notwendige Angabe, siehe auch dem Abschnitt `Abweichung von den Vorgaben für die Titelseite'
 \department{ce} % Das Kürzel wird automatisch ersetzt und als Studienfach gewählt, siehe Liste der Kürzel im Dokument.
 \institute{Institut}
@@ -109,24 +107,23 @@ Für Erläuterungen zu den TUDaPub spezifischen Optionen, sei auf die Datei DEMO
 Da die Basisklasse für beide identisch ist, kann jede Option abgeändert werden. Die Folgende Liste zeigt lediglich die gezeigten Features bei Standardeinstellungen.
 
 \begin{tabularx}{\linewidth}{@{}p{.25\linewidth}*3{>{\centering\arraybackslash}X}@{}}
-\toprule
-Option&DEMO-TUDaThesis&DEMO-TUDaPhD&DEMO-TUDapub\\
-\midrule
-twoside&\FeatureFalse&\FeatureTrue&\FeatureFalse\\\midrule
-parskip&\FeatureTrue&\FeatureFalse&\FeatureTrue\\\midrule
-Kolophon&\FeatureFalse&\FeatureTrue&\FeatureFalse\\\midrule
-Widmung&\FeatureFalse&\FeatureTrue&\FeatureFalse\\\midrule
-Schriftgröße&11pt&11pt&9pt\\\midrule
-ruledheaders&section&chapter&all\\\midrule
-Basisklasse&scrreprt&scrbook&scrartcl\\\midrule
-thesis&\ttfamily type=bachelor&\ttfamily type=dr,
-	dr=rernat
-&\FeatureFalse\\\midrule
-marginpar&\FeatureTrue&\FeatureFalse&\FeatureTrue\\\midrule
-Affidavit\newline\rlap{(Selbstständigkeitserklärung)}&\FeatureTrue&\FeatureTrue&\FeatureFalse\\\midrule
-abstract&\FeatureFalse&\FeatureTrue&\FeatureTrue\\\midrule
-custommargins&\FeatureTrue&\FeatureTrue&\FeatureFalse\\
-\bottomrule
+	\toprule
+	Option&DEMO-TUDaThesis&DEMO-TUDaPhD&DEMO-TUDapub\\
+	\midrule
+	twoside&\FeatureFalse&\FeatureTrue&\FeatureFalse\\\midrule
+	parskip&\FeatureTrue&\FeatureFalse&\FeatureTrue\\\midrule
+	Kolophon&\FeatureFalse&\FeatureTrue&\FeatureFalse\\\midrule
+	Widmung&\FeatureFalse&\FeatureTrue&\FeatureFalse\\\midrule
+	Schriftgröße&11pt&11pt&9pt\\\midrule
+	ruledheaders&section&chapter&all\\\midrule
+	Basisklasse&scrreprt&scrbook&scrartcl\\\midrule
+	thesis&\ttfamily type=bachelor&\ttfamily type=dr, dr=rernat
+	&\FeatureFalse\\\midrule
+	marginpar&\FeatureFalse&\FeatureFalse&\FeatureTrue\\\midrule
+	Affidavit\newline\rlap{(Selbstständigkeitserklärung)}&\FeatureTrue&\FeatureTrue&\FeatureFalse\\\midrule
+	abstract&\FeatureFalse&\FeatureTrue&\FeatureTrue\\\midrule
+	custommargins&\FeatureTrue&\FeatureTrue&\FeatureFalse\\
+	\bottomrule
 \end{tabularx}
 
 
@@ -137,63 +134,100 @@ Die Klasse kann wie für Dokumentenklassen üblich eingebunden werden
 \end{verbatim}
 Die Option \code{thesis} wechselt hierbei in den Modus, der spezielle Features für Abschlussarbeiten freischaltet, die in diesem Dokument beschrieben werden.
 
-Darüber hinaus lässt sich die Klasse verwenden wie die Standard-KOMA-Script-Klasse, auf der sie basiert. 
+Darüber hinaus lässt sich die Klasse verwenden wie die Standard-KOMA-Script-Klasse, auf der sie basiert.
 Voreingstellt ist hierbei \code{scrreprt}.
 
-Allgemein bietet \KOMAScript{} viele Möglichkeiten  zu Anpassungen. Wie in der tudapub-Demo-Datei beschrieben, können hier jedoch nicht alle erläutert werden, ein Blick in die offizielle Dokumentation ist daher häufig hilfreich \cite{scrguide}.
-
-
+Allgemein bietet \KOMAScript{} viele Möglichkeiten zu Anpassungen. Wie in der tudapub-Demo-Datei beschrieben, können hier jedoch nicht alle erläutert werden, ein Blick in die offizielle Dokumentation ist daher häufig hilfreich \cite{scrguide}.
 
 \section{Übergabe der Titelinformationen}
 
-Die Titelinformationen werden analog zur klassichen Titelerzeugung mit \verb+\maketitle+ übergeben. Allerdings wurden die Felder um ein paar speziellere Daten erweitert. Sofern nicht anders angegeben, verfügen alle Makros über ein Notwendiges Argument für die Datenübergabe, z.\,B. 
+Die Titelinformationen werden analog zur klassichen Titelerzeugung mit \verb+\maketitle+ übergeben. Allerdings wurden die Felder um ein paar speziellere Daten erweitert. Sofern nicht anders angegeben, verfügen alle Makros über ein notwendiges Argument für die Datenübergabe, z.\,B.
 \begin{verbatim}
 \title{\LaTeX{} im Corporate Design der TU Darmstadt}
 \end{verbatim}
-Es ist zu beachten, dass für die Erzeugung der Titelseite nach Übergabe aller Daten \verb+\maketitle+ aufgerufen werden muss. 
+Es ist zu beachten, dass für die Erzeugung der Titelseite nach Übergabe aller Daten \verb+\maketitle+ aufgerufen werden muss.
 
 \begin{description}\setkomafont{descriptionlabel}{\ttfamily\textbackslash}
-	\item[title] Titel, wird in sehr großer schrift im obersten Block der Titelseite platziert. Die Schriftgröße ist aufgrund der Häufigkeit für lange Titel kleiner gewählt, als für andere Publikationen.
+	\item[title] Titel, wird in sehr großer Schrift im obersten Block der Titelseite platziert. Die Schriftgröße ist aufgrund der Häufigkeit für lange Titel kleiner gewählt als für andere Publikationen.
 	\item[subtitle] Untertitel. Dieses Feld kann alternativ für eine Übersetzung genutzt werden.
 	\item[author] Der Autor/dir Autoren. Mehere Autoren werden durch \verb+\and+ getrennt.
+	\item[studentID] Matrikelnummer. Nach den Vorgaben des Templates ist diese Angabe immer optional.
 	\item[birthplace] Geburtsort. Angabe ist bei Dissertationen notwendig.
 	\item[reviewer] Gutachter. Mehrere Gutachter werden, wie Autoren durch \verb+\and+ getrennt. Die Nummerierung läuft von links nach rechts.
-	\item[institution] Einrichtung. Dieser Eintrag, wie auch die beiden Folgenden werden unterhalb des Logos auf der Titelseite platziert.
-	\item[department] Fach-/Studienbereich allerdings ist die oben genannte Option zu bevorzugen. Die Verarbeitung des Arguments erfolgt jedoch analog.
+	\item[institution] Einrichtung. Dieser Eintrag, wie auch die beiden folgenden, werden unterhalb des Logos auf der Titelseite platziert.
+	\item[department] Fach-/Studienbereich, allerdings ist die oben genannte Option zu bevorzugen. Die Verarbeitung des Arguments erfolgt jedoch analog.
+
+	Dieses Makro verfügt jedoch zusätzlich über die Möglichkeit abweichende Einträge gegenüber den Vorgaben anzugeben. Insbesondere wenn eine gesonderte Formulierung gegenüber der voreingestellten \enquote{im Fachbereich} und ihren Varianten notwendig ist. Hierfür liefert \code{\textbackslash{}department} ein optionales Argument:
+
+	\begin{verbatim}
+	\department[Ersatztext]{Kürzel/Bezeichnung}
+	\end{verbatim}
+	Zusätzlich gibt es ab Version 2.01 auch die Möglichkeit den gesamten Text \enquote{im Fachbereich <Bereichsbezeichnung>}, sowie die Angabe in der Infobox auf der Titelseite zu ersetzen. Dies geschieht über die gesternte Variante:
+	\begin{verbatim}
+	\department*[Text für die Box]{Text zwischen Typ und Autor}
+	\end{verbatim}
 	\item[group] Arbeitsgruppe.
-	\item[submissiondate] Datum der Einreichtung
+	\item[submissiondate] Datum der Einreichung
 	\item[examdate] Datum der Disputation
 	\item[date] Beliebiges Datum. Wird über \verb|datename| bezeichnet.
+	\item[publishers] Wird hier für die Ortsangabe verwendet und ist mit \enquote{Darmstadt}, bzw. \enquote{Darmstadt -- D17} (bei Dissertationen) vorbelegt.
 	\item[tuprints] \label{page:tuprints}Übergabe der Daten, sofern das dokument über tuprints Veröffentlicht werden soll.
 	\begin{verbatim}
 	\tuprints{urn=1234, printid=12345}
 	\end{verbatim}
 	Falls das Argument kein Gleichheitszeichen erkennt, wird der Wert als \code{printid} gesetzt und keine URN angegeben.
-	
+
 	\item[titleimage] Hier kann Code übergeben werden, der den farbigen Block im unteren Teil der Titelseite ersetzt. Als Maße können hier die Längen \verb+\layerwidth+ und \verb+\layerheight+ verwendet werden. Sie passen sich dem Verfügbaren Platz an. Für ein Beispiel sei auf die TUDapub-Dokumentation verwiesen.
+	\item[titleintro] Ab Version 2.03 kann zusätzlich über diesen Hook ein beliebiger Text direkt nach dem Untertitel und vor den automatischen Informationen ergänzt werden.
+	\item[titleaddendum] Wie \code{\tbs{}titleintro} jedoch als letztes Element des Blocks.
 \end{description}
 
 \section{Weitere Macros}
-
 Das Makro \verb+\affidavit+ erzeugt eine Selbstständigkeitserklärung mit Unterschriftenzeile. Hier wird der oben übergebene Name/Signatur eingefügt.
 In diesem Dokument findet sich das Affidavit direkt nach der Titelei.
+
+Es besteht zusätzlich die Möglichkeit ein anderssprachiges Affidavit als Ergänzung mit abzudrucken. Um die Struktur und die ggf. notwendige Sprachumschaltung zu erledigen, existiert hierfür ab Version 2.03 eine Umgebung:
+
+\begin{verbatim}
+\begin{affidavit*}[Babel-Sprachoption]{Überschrift}
+Text
+\end{affidavit*}
+\end{verbatim}
+
+Diese Variante verfügt bewusst über keine Unterschriftenzeile, da diese Version laut Verständnis der Entwickler keine rechtliche Verbindlichkeit besitzt.
+
+Die Umgebung kann jedoch auch für besondere Formen der Erklärung genutzt werden. In diesem Fall kann eine zusätzliche Signaturzeile über
+\begin{verbatim}
+\AffidavitSignature[Stadt]
+\end{verbatim}
+hinzugefügt werden. Die Vorbelegung für Stadt ist hierbei \enquote{Darmstadt}.
 
 \section{Layout-Optionen mit Verstoß gegen das Corporate Design}
 Die Zeilenlängen sind laut Corporate Design aus typografischer Sicht zu lang.
 Daher existiert die Klassenoption \code{custommargins}, die für dieses Dokument aktiviert wurde.
 
-Die Option \code{custommargins} verfügt ab Version 1.10 auch über den Wert \code{custommargins=geometry}. Damit können die Ränder auch durch einen Aufruf von \code{\textbackslash{}geometry} vor Beginn des Dokuments manuell angepasst werden.
+Die Option \code{custommargins} verfügt ab Version 1.10 auch über den Wert \code{geometry}. Damit können die Ränder auch durch einen Aufruf von \code{\tbs{}geometry} vor Beginn des Dokuments manuell angepasst werden.
+
+Hierbei ist zu beachten, dass die Einstellungen als Ausgangspunkt den Voreingestellten Satzspiegel nutzen (je nach Option mit Randnotizspalte oder ohne). Es ist möglich diese Optionen vor den eigenen mit zurückzusetzen:
+\begin{verbatim}
+\geometry{
+	reset,
+	<Eigene Anpassungen>
+}
+\end{verbatim}
+Die gilt insbesondere für die Optionen \code{includehead}, \code{includefoot} und \code{includemp}.
 
 Diese Variante wird auf Wunsch zur Verfügung gestellt, allerdings wird darauf hingewiesen, dass manuelle Randeinstellungen oft nicht zu einem harmonischen Satzspiegel führen.
 
-Auch ist das Standard-Layout der Kolumnentitel wenig Vorteilhaft, da die Kolumnentitel damit local größer sein können als die eigentliche Überschrift.
+Auch ist das Standard-Layout der Kolumnentitel wenig vorteilhaft, da die Kolumnentitel damit local größer sein können als die eigentliche Überschrift.
 
-Dadurch werden die Ränder nicht fest definiert, sondern auf Basis des typearea-Paketes optimiert. 
+
+Dadurch werden die Ränder nicht fest definiert, sondern auf Basis des typearea-Paketes optimiert.
 
 Wenn die option \code{marginpar=true} gesetzt bleibt, ragen die Kopf- und Fußzeile über die Marginalspalte hinaus. Aus ästhetischen Gründen wird daher empfohlen in diesem Fall die Kopf- und Fußzeile  mit \code{marginpar=false}  auf den Textbereich zu beschränken.
 
 
-Darüber hinaus kann über 
+Darüber hinaus kann über
 \begin{verbatim}
 \pagestyle{TUDa.headings}
 \end{verbatim}
@@ -204,7 +238,7 @@ ein einfacherer Seitenstil ausgewählt werden, der die Nutzung mit lebenden Kolu
 Die Klasse unterstützt alle Optionen der \file{tudapub}-Klasse. Darüber hinaus besteht über Wertzuweisung der Option \code{thesis} die Möglichkeit spezielle Einstellungen zu wählen.
 Es ist prinzipiell möglich die Optionen auch direkt als Optionen zur \file{tudapub}-Klasse zu übergeben, allerdings ist dies aufgrund der schlechteren Übersicht nicht zu empfehlen.
 
-Für dieses Dokument wurden beispielsweise die Optionen als 
+Für dieses Dokument wurden beispielsweise die Optionen als
 \begin{verbatim}
 thesis={type=drfinal,dr=phil}
 \end{verbatim}
@@ -212,27 +246,27 @@ thesis={type=drfinal,dr=phil}
 
 Im folgenden findet sich die Bedeutung der einzelnen Optionen:
 \begin{description}
-	\item[type=<Wert>] Auswahl des Typus. Dieser wird auf die Titelseite gesetzt und wählt zudem aus welche Informationen für die Titelseite zwingend übergeben werden müssen.
-	Es stehen die folgenden Werte zur Verfügung:
+\item[type=<Wert>] Auswahl des Typus. Dieser wird auf die Titelseite gesetzt und wählt zudem aus welche Informationen für die Titelseite zwingend übergeben werden müssen.
+	Es stehen die folgenden Werte zur Verfügung (die Werte in Klammern sind die notwendigen Titeldaten):
 	\begin{itemize}
-		\item \code{sta}: Studienarbeit
-		\item \code{diplom}: Diplomarbeit
-		\item \code{bachelor}: Bachelorarbeit
-		\item \code{master}: Masterarbeit
-		\item \code{pp}: Project-Proposal
-		\item \code{dr}: vorgelegte Dissertation
-		\item \code{drfinal}: genehmighte Dissertation
+	\item \code{sta}: Studienarbeit (title, author, date)
+	\item \code{diplom}: Diplomarbeit (title, author, submissiondate, reviewer, department)
+	\item \code{bachelor}: Bachelorarbeit (title, author, submissiondate, department, reviewer)
+	\item \code{master}: Masterarbeit (title, author, submissiondate, department, reviewer)
+	\item \code{pp}: Project-Proposal  (title, author, date, department)
+	\item \code{dr}: vorgelegte Dissertation (title, author, submissiondate , birthplace, department, reviewer)
+	\item \code{drfinal}: genehmigte Dissertation (title, author, submissiondate,examdate, birthplace, department, reviewer)
 	\end{itemize}
-	Wird ein Typus angegeben, der nicht erkannt wird, so wird der Text direkt übergeben. Notwendige Titelfelder über den Titel hinaus gibt es in diesem Fall nicht	
-	\item[dr=<Kürzel>] Lädt einen der vordefinierten Texte für die Titelseite. Als Werte stehen bislang \code{rernat}, \code{ing} und \code{phil} zur Verfügung. Zum Beispiel lädt der Wert \code{phil}:
+	Wird ein Typus angegeben, der nicht erkannt wird, so wird der Text direkt übergeben. Notwendige Titelfelder über den Titel hinaus gibt es in diesem Fall nicht.
+\item[dr=<Kürzel>] Lädt einen der vordefinierten Texte für die Titelseite. Als Werte stehen bislang \code{rernat}, \code{ing} und \code{phil} zur Verfügung. Zum Beispiel lädt der Wert \code{phil}:
 	\begin{quote}
-		Zur Erlangung des Grades eines Doktor der Philosophie (Dr.\,phil.)
+	Zur Erlangung des Grades eines Doktor der Philosophie (Dr.\,phil.)
 	\end{quote}
-	Sofern keiner dieser Werte dem angestrebten Titel entspricht, kann ein Text direkt übergeben werden. 
+	Sofern keiner dieser Werte dem angestrebten Titel entspricht, kann ein Text direkt übergeben werden.
 	\begin{verbatim}
 	\drtext{Zur Erlangung des Grades \ldots}
 	\end{verbatim}
-	\item[department=<Kürzel>] Die Fachbereiche sind fest als Textbausteine in Deutscher sowie Englischer Sprache hinterlegt. Diese Option ermöglicht die Auswahl als Dokumentenklassenoption. Aus Kompatibilitätsgründen kann jedoch auch das Makro \code{department}-Makro hierfür genutzt werden. Zur Verfügung stehen:\par
+\item[department=<Kürzel>] Die Fachbereiche sind fest als Textbausteine in Deutscher sowie Englischer Sprache hinterlegt. Diese Option ermöglicht die Auswahl als Dokumentenklassenoption. Aus Kompatibilitätsgründen kann jedoch auch das Makro \code{department}-Makro hierfür genutzt werden. Zur Verfügung stehen:\par
 	\begin{tabular}{@{}l@{${}\to{}$}l@{}}
 		arch  & Architektur\\
 		bauing& Bau- und Umweltingenieurwissenschaften\\
@@ -248,10 +282,10 @@ Im folgenden findet sich die Bedeutung der einzelnen Optionen:
 		phys  &Physik\\
 		wi    &Rechts- und Wirtschaftswissenschaften
 	\end{tabular}
-	
+
 	Neben den Fachbereichen existieren für Abschlussarbeiten, die keine Dissertationen sind auch Studienbereiche.
 	Falls das Kürzel nicht als Fachbereich hinterlegt ist, wird automatisch auf die Studienbereiche geprüft. Die Studienbereiche haben die folgenden Kürzel:
-	
+
 	\begin{tabular}{@{}l@{${}\to{}$}l@{}}
 		ce&Computational Engineering\\
 		ese&Energy Science and Engineering\\
@@ -259,15 +293,21 @@ Im folgenden findet sich die Bedeutung der einzelnen Optionen:
 		mech&Mechanik\\
 		metro&Mechatronik
 	\end{tabular}
-	
+
 	Falls etwas anderes als eines dieser Kürzel übergeben wird, wird der Text direkt verwendet und eine entsprechende Warnung ausgegeben.
-	
-	\item[ignore-missing-data] Diese Option ist ein Schalter, der es ermöglicht die Fehlermeldung über nicht übergebene Titeldaten auszuschalten. In diesem Fall wird lediglich eine Warnung erzeugt, falls die angegeben Daten nicht mit den Anforderungen übereinstimmen.
+
+	Die Auswahl der Fachrichtung erzeugt zusätzlich eine Box auf der Titelseite unterhalb des Logos. Falls diese automatische Erstellung nicht gewünscht ist, kann dies über die Option \code{instbox=false} deaktiviert werden.
+\item[ignore-missing-data] Diese Option ist ein Schalter, der es ermöglicht die Fehlermeldung über nicht übergebene Titeldaten auszuschalten. In diesem Fall wird lediglich eine Warnung erzeugt, falls die angegeben Daten nicht mit den Anforderungen übereinstimmen.
 \end{description}
 
 \minisec{Abweichung von den Vorgaben für die Titelseite}
-Da es möglich sein kann von dieser Vorgabe abzuweichen existiert für Sonderfälle die Dokumentenklassenoption \code{instbox=false}. Damit wird die automatische Verarbeitung der Daten für die Boxen auf der der Titelseite unterdrückt. In diesem Fall ist der Autor jedoch selbst für die Einhaltung der Vorschriften verantwortlich. Weiter Informationen zur Konstruktion der Boxen findet sich in den Verwendungshinweisen zu Basisklasse TUDaPub.
-		
+Da es möglich sein kann von dieser Vorgabe abzuweichen, existiert für Sonderfälle die Dokumentenklassenoption \code{instbox=false}. Damit wird die automatische Verarbeitung der Daten für die Boxen auf der der Titelseite unterdrückt. In diesem Fall ist der Autor jedoch selbst für die Einhaltung der Vorschriften verantwortlich. Weitere Informationen zur Konstruktion der Boxen findet sich in den Verwendungshinweisen zu Basisklasse TUDaPub. Zusätzlich sei auf die Möglichkeiten des \code{\textbackslash{}department}-Makros verwiesen, sofern die Abweichung sich auf den Text beschränkt.
+
+\section{Erhöhter Zeilenabstand -- Informationen zum setspace-Paket}
+Sofern die Vorgaben es erfordern, ist es möglich mit dem setspace-Paket den Durchschuss zu erhöhen. Allerdings beeinflusst dies natürlich sämtliche Zeilenabstände. Ein erhöhter Zeilenabstand sollte daher erst nach der Titelseite aktiviert werden. Allgemein ist es jedoch empfehlenswert auch für Verzeichnisse und sonstige Sonderelemente außerhalb des Fließtextes auf bei normalen Einstellungen zu bleiben.
+
+Setspace liefert hierfür die Möglichkeit, das Paket ohne Optionen zu laden und später über Makros, wie \code{\tbs{}onehalfspacing} das Umschalten zu verzögern. Alternativ kann auch durch die Umgebungen, wie \code{singlespace} lokal wieder zum Normalzustand gewechselt werden, sofern dies erforderlich ist.
+
 \printbibliography
-	
+
 \end{document}

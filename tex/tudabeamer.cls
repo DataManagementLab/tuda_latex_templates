@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{tudabeamer}
  [\filedate\space\fileversion\space]
-   
+
 \RequirePackage{l3keys2e}
 \RequirePackage{URspecialopts}
 
@@ -16,7 +16,6 @@
 	colorframetitle .code:n = \PassOptionsToPackage{\l_keys_key_tl=#1}{beamercolorthemeTUDa}
 	\PassOptionsToPackage{\l_keys_key_tl=#1}{beamerouterthemeTUDa},
 	colorframetitle .default:n = true,
-%	colorback .code:n = \PassOptionsToPackage{accentcolor=#1}{beamercolorthemeTUDa},
 	logo .code:n = \PassOptionsToPackage{logo=#1}{beamerouterthemeTUDa},
 	pdfa .bool_gset:N = \g_TUDa@pdfa_bool,
 	pdfa .initial:n = false,
@@ -31,8 +30,8 @@
 \clist_map_inline:nn {colortitle, colorbacktitle, colorback} {
 	\Module@DeclarePassOption[TUDa/beamer]{#1}{beamercolorthemeTUDa}
 }
-
 \Module@DeclarePassOption[TUDa/beamer]{centerframetitle}{beamerouterthemeTUDa}
+\Module@DeclarePassOption[TUDa/beamer]{authorontitle}{beamerinnerthemeTUDa}
 
 \ExplSyntaxOff
 
@@ -119,7 +118,7 @@
 	\cs_set:Npn \and {\exp_not:n {\exp_not:N \sep}}
 	\bool_if:NTF \g_TUDa_pass_TitleData_bool {
 		\tl_gset:Nx \g_TUDa@xmp_title {\insertshorttitle}
-		\tl_gset:Nx \g_TUDa@xmp_author {\insertshortauthor}	
+		\tl_gset:Nx \g_TUDa@xmp_author {\insertshortauthor}
 		\iow_now:Nx \TUDa@xmpdata_stream
 		{
 			\exp_not:N \Title{\tl_to_str:V \g_TUDa@xmp_title}
@@ -137,10 +136,20 @@
 	}
 	\endgroup
 }
-\cs_new:Nn \TUDa_write_xmp_line:nn {		
-	\cs_if_exist:cTF {\tl_mixed_case:n {#1}} {
+\cs_new:Nn \TUDa_write_xmp_line:nn {
+	%Fallback test for older kernels
+	\cs_if_exist:NTF \str_uppercase:f {
+	\tl_set:Nx \l_tmpa_tl {
+		\str_uppercase:f {\tl_head:n {#1}}
+		\str_lowercase:f { \tl_tail:n {#1}}
+	}
+	} {
+	%may be removed in some time
+	\tl_set:Nx \l_tmpa_tl {\tl_mixed_case:n {#1}}
+	}
+	\cs_if_exist:cTF {\l_tmpa_tl}{
 		\iow_now:Nx \TUDa@xmpdata_stream {
-			\c_backslash_str \tl_mixed_case:n {#1} {#2}\iow_newline:
+			\c_backslash_str \l_tmpa_tl {\exp_not:n {#2}}
 		}
 	}{
 		\msg_error:nnn {TUDapub} {unknown-metadata} {#1}

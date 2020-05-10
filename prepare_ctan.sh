@@ -1,4 +1,6 @@
 #!/bin/bash
+git checkout .
+./addlicense.sh
 
 rm -f tuda-ci.zip
 mkdir -p tuda-ci
@@ -13,7 +15,7 @@ cd ..
 cp -r tex tuda-ci/.
 
 mkdir -p tuda-ci/example
-cp example/*.tex tuda-ci/example/.
+cp example/DEMO-*.tex tuda-ci/example/.
 cp example/*.lco tuda-ci/example/.
 cp example/*.bib tuda-ci/example/.
 

@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
 \RequirePackage{expl3}
-\ProvidesExplPackage{tudaletter}
+\ProvidesExplClass{tudaletter}
 	{\filedate}{\fileversion}{Letters for TUDa-CI, Corporate Design of TU Darmstadt}
 
 \RequirePackage{l3keys2e}
@@ -35,11 +35,11 @@
 % Load the TUDa-colorscheme
 \RequirePackage{tudacolors}
 
-\bool_if:NTF \g_TUDaletter_premium_bool 
+\bool_if:NTF \g_TUDaletter_premium_bool
 {	\def\TUDa@premiumcolor{accentcolor}
 	\def\TUDa@use@premiumcolor{\color{accentcolor}}
 	\def\TUDa@use@premiumcolor@text{\color{textaccentcolor}}
-}{	
+}{
 	\def\TUDa@premiumcolor{black}
 	\let\TUDa@use@premiumcolor\relax
 	\let\TUDa@use@premiumcolor@text\relax
@@ -65,7 +65,7 @@
 
 \geometry{
 	twoside=false,
-	left=\c_TuDa_LeftMargin_dim, 
+	left=\c_TuDa_LeftMargin_dim,
 	right=\c_TuDa_RightMargin_dim,
 	bottom=20mm,
 	footskip=3mm,
@@ -90,7 +90,7 @@
 
 \@setplength{toaddrhpos}{\c_TuDa_LeftMargin_dim}
 \@setplength{toaddrvpos}{50mm}
-\@setplength{backaddrheight}{4mm} 
+\@setplength{backaddrheight}{4mm}
 \@setplength{toaddrindent}{0mm}
 
 \@setplength{refhpos}{\c_TuDa_LeftMargin_dim}
@@ -120,7 +120,7 @@
 \hbox_gset:Nn \g_TUDaLetter_firsthead_box {
 	\parbox{\useplength{firstheadwidth}}{
 	\raggedleft
-	\TuDa@LetterheadRule\par
+	\smash{\TuDa@LetterheadRule}\par
 	\vspace{.5\c_TUDa_logoheight_dim}
 	\makebox[2.2\c_TUDa_logoheight_dim][l]{\includegraphics[height=\c_TUDa_logoheight_dim]{\g_TUDa_logofile_tl}}
 	}
@@ -152,33 +152,33 @@
 	\par@updaterelative
       \begingroup
 	  \usekomafont{TUDa_frominst}
-      \ifkomavarempty{frominstitution}{}{%
+      \Ifkomavarempty{frominstitution}{}{%
       	{\usekomavar[\raggedright]{frominstitution}}
       	\\[\baselineskip]}%
-      \ifkomavarempty{frominstitution-en}{}{%
+      \Ifkomavarempty{frominstitution-en}{}{%
       	\usekomavar[\raggedright]{frominstitution-en}
       	\\[\baselineskip]}%
 	  \endgroup
-      \ifkomavarempty{fromlogo}{}{\usekomavar{fromlogo}\\[\baselineskip]}%
-      \ifkomavarempty{fromname}{}
+      \Ifkomavarempty{fromlogo}{}{\usekomavar{fromlogo}\\[\baselineskip]}%
+      \Ifkomavarempty{fromname}{}
       {{\usekomafont{fromname}\usekomavar{fromname}}
-      		\ifkomavarempty{fromfunction}{}{\\\usekomavar{fromfunction}}
+		\Ifkomavarempty{fromfunction}{}{\\\usekomavar{fromfunction}}
       		\\[\baselineskip]}%
-      \ifkomavarempty{fromaddress}{}{\usekomavar{fromaddress}\\[\baselineskip]}%
+      \Ifkomavarempty{fromaddress}{}{\usekomavar{fromaddress}\\[\baselineskip]}%
       \@tempswafalse
       \clist_map_inline:nn {fromphone, fromfax, fromemail, fromurl}{
          \@tempswatrue
-	  	 \ifkomavarempty{##1}{}{
-	  	 	\ifkomavarempty*{##1}{}{\makebox[1cm][l]{\usekomavar*{##1}}}\usekomavar{##1}\par
+			\Ifkomavarempty{##1}{}{
+			\Ifkomavarempty*{##1}{}{\makebox[1cm][l]{\usekomavar*{##1}}}\usekomavar{##1}\par
   	 	}
   	  }
       \if@tempswa
       \vspace{2\baselineskip}
       \fi
-        \ifkomavarempty*{date}{}{\usekomavar*{date}\\\usekomavar{date}}
+        \Ifkomavarempty*{date}{}{\usekomavar*{date}\\\usekomavar{date}}
       \seq_use:Nn  \g_TUDa_reffields_seq {}
-      \ifkomavarempty{frombank}{}{\vfill%
-        \ifkomavarempty*{frombank}{Bankverbindung}{\usekomavar*{frombank}}\\\usekomavar{frombank}
+      \Ifkomavarempty{frombank}{}{\vfill%
+        \Ifkomavarempty*{frombank}{Bankverbindung}{\usekomavar*{frombank}}\\\usekomavar{frombank}
 	 }
 }
 
@@ -187,7 +187,7 @@
 \tl_const:Nn \TUDa@reffield_separator_tl {\\}
 
 \cs_new:Nn \TUDa@set@reffield:n {
-	\ifkomavarempty{#1}{}{%
+	\Ifkomavarempty{#1}{}{%
 		\if@tempswa\\[\baselineskip]\fi
 		\parbox[t]{\linewidth}{\noindent\raggedright
 			\usekomafont{refname}
@@ -216,7 +216,7 @@
 			\let\scr@datemarkerfield@name=\scr@date@name
 			\setkomavar{date}{}%
 		}
-		\ifkomavarempty{##1}{}{%
+		\Ifkomavarempty{##1}{}{%
 			\seq_gput_right:Nn \g_TUDa_reffields_seq {%
 				\TUDa@set@reffield:n {##1}
 			}%
@@ -228,7 +228,7 @@
 	\@gen@firsthead
 	\@mkboth{\scr@fromname@var}{\scr@subject@var}%
 	\thispagestyle{empty}\noindent
-	\ifkomavarempty{toname}{\setkomavar{toname}{\mbox{}}}{}
+	\Ifkomavarempty{toname}{\setkomavar{toname}{\mbox{}}}{}
 	\@foldmarks\@firstheadfootfield\@addrfield\@locfield
 	\ifdim\useplength{subjectvpos}=\z@\else\@subjfield\fi
 	\@datefield
@@ -244,7 +244,7 @@
 	\@nobreaktrue
 	\@afterindentfalse
 	\everypar{%
-		\if@nobreak 
+		\if@nobreak
 			\@nobreakfalse\clubpenalty\@M
 			\if@afterindent
 			\else{\setbox\z@\lastbox}
@@ -256,7 +256,7 @@
 		\ifnum\thepage=1%
 		\TUD@page@free=-\pagegoal%
 		\advance\TUD@page@free\pagetotal%
-		\dim_compare:nTF {-\TUD@page@free>2\baselineskip}  
+		\dim_compare:nTF {-\TUD@page@free>2\baselineskip}
 		{
 			\bool_if:NF \g_TUDaletter_logo_bool {
 				\advance\TUD@page@free-.3\baselineskip
@@ -275,7 +275,7 @@
 	}%
 	\global\setlength{\linewidth}{\dim_eval:n {\c_TuDa_Linewidth_dim + \c_TuDa_firstpage_extraindent_dim}}
 	\afterpage{
-		\global\setlength{\linewidth}{\c_TuDa_Linewidth_dim}	
+		\global\setlength{\linewidth}{\c_TuDa_Linewidth_dim}
 		\widowpenalty=10000
 	}
 }
@@ -293,7 +293,7 @@
 \newcommand*{\TUDa@letterpagemark}{
 	%get lastpage for this letter if not already done
 	\int_compare:nTF {\value{page} = 1} {
-			\bool_if:NTF \g_TUDa_firstpagenumber_bool 
+			\bool_if:NTF \g_TUDa_firstpagenumber_bool
 			{\bool_set_true:N \l_tmpa_bool}
 			{\bool_set_false:N \l_tmpa_bool}
 		}
@@ -305,7 +305,7 @@
 			\int_const:cn {c_TUDa_letter\thisletter _lastpage_int} {0}
 			\else
 			\int_const:cn {c_TUDa_letter\thisletter _lastpage_int} {
-				\cs_if_exist:NTF \hypersetup 
+				\cs_if_exist:NTF \hypersetup
 				{\exp_args:NNc \expandafter \@secondoffive { r@\thisletter.lastpage}}
 				{\exp_args:NNc \expandafter \use_ii:nn { r@\thisletter.lastpage}}
 			}
@@ -352,7 +352,7 @@
 	height=\box_ht:N \TuDa@LetterheadRule_box,
 	contents=\TuDa@LetterheadRule
 	]{letter.head}
-} 	
+}
 
 \DeclareNewLayer[
 	background,
@@ -395,13 +395,23 @@
 	\use:c {pdfx@localcommands}
 	\prop_map_function:NN \g_TUDa_MetaData_prop  \TUDa_write_xmp_line:nn
 	\endgroup
-	\iow_close:N  \TUDa@xmpdata_stream 
+	\iow_close:N  \TUDa@xmpdata_stream
 	}
 }
-\cs_new:Nn \TUDa_write_xmp_line:nn {		
-	\cs_if_exist:cTF {\tl_mixed_case:n {#1}} {
+\cs_new:Nn \TUDa_write_xmp_line:nn {
+	%Fallback test for older kernels
+	\cs_if_exist:NTF \str_uppercase:f {
+		\tl_set:Nx \l_tmpa_tl {
+			\str_uppercase:f {\tl_head:n {#1}}
+			\str_lowercase:f { \tl_tail:n {#1}}
+		}
+	} {
+		%may be removed in some time
+		\tl_set:Nx \l_tmpa_tl {\tl_mixed_case:n {#1}}
+	}
+	\cs_if_exist:cTF {\l_tmpa_tl}{
 		\iow_now:Nx \TUDa@xmpdata_stream {
-			\c_backslash_str \tl_mixed_case:n {#1} {#2}\iow_newline:
+			\c_backslash_str \l_tmpa_tl {\exp_not:n {#2}}
 		}
 	}{
 		\msg_error:nnn {TUDapub} {unknown-metadata} {#1}
@@ -447,5 +457,10 @@
 \newkomavar{fromfunction}
 
 \bool_if:NT \g_TUDa_raggedright_bool {\AtBeginLetter{\RaggedRight}}
+
+%backwards compatibility for KOMA-Script
+\cs_if_exist:NF \Ifkomavarempty{
+	\let\Ifkomavarempty\ifkomavarempty
+}
 
 \endinput

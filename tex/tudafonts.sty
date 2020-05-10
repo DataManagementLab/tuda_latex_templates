@@ -1,10 +1,10 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{tudafonts}
- [\filedate\space\fileversion\space 
+ [\filedate\space\fileversion\space
    font loading for TUDa-CI, TU Darmstadt's Corporate Design]
 
 \expandafter\newif\csname if@TUDa@T1\endcsname
-   
+
 \DeclareOption{T1}{\csname @TUDa@T1true\endcsname}
 \ProcessOptions\relax
 
@@ -12,23 +12,30 @@
 \RequirePackage{anyfontsize}
 
 \ifPDFTeX
-        \csname @TUDa@T1true\endcsname
-        %Fallback for older versions
-	\expandafter\ifx\csname DeclareUnicodeCharacter\endcsname\relax
-	\RequirePackage[utf8]{inputenc}
-        \cs_if_exist:NF \texteuro {\RequirePackage{textcomp}}
-        \DeclareUnicodeCharacter{20AC}{\texteuro}
-	\fi
-\else
-	\RequirePackage{fontspec}
+    \csname @TUDa@T1true\endcsname
+    %Fallback for older versions
+    \expandafter\ifx\csname DeclareUnicodeCharacter\endcsname\relax
+    \RequirePackage[utf8]{inputenc}
+    \fi
+    \expandafter\ifx\csname texteuro\endcsname\relax
+       \RequirePackage{textcomp}
+    \fi
+    \DeclareUnicodeCharacter{20AC}{\texteuro}
 \fi
 
 \csname if@TUDa@T1\endcsname
     \RequirePackage{XCharter}%activates T1
     \PassOptionsToPackage{type1}{roboto}
     \PassOptionsToPackage{type1}{roboto-mono}
+    %Workaround for missing ligature replacements with roboto in T1
+    \ifXeTeX
+    \else
+    \RequirePackage{microtype}
+    \DisableLigatures{encoding = *, family=\sfdefault,  shape = sc }
+    \fi
 \else
-	\setmainfont{XCharter}
+    \RequirePackage{fontspec}
+    \setmainfont{XCharter}
 \fi
 
 \RequirePackage{roboto}
