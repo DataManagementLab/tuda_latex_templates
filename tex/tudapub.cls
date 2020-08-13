@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \RequirePackage{expl3}
 \ProvidesExplClass{tudapub}
-	{\filedate}{\fileversion}{Publications using TU Darmstadt's Coporate Design (TUDa-CI)}
+	{\filedate}{\fileversion}{Publications using TU Darmstadt's Corporate Design (TUDa-CI)}
 
 \RequirePackage{l3keys2e}
 \RequirePackage{URspecialopts}
@@ -257,15 +257,6 @@
 			\dim_gset_eq:NN \g_TUDa_topMargin_dim \g_TUDa_outerMargin_dim
 		}
 	}
-
-%TODO pubched
-%%punched
-%\dim_gset:Nn \g_TUDa_outerMargin_dim {15mm}
-%\dim_gset:Nn \g_TUDa_innerMargin_dim {20mm}
-%\if@twoside
-%\else
-%\dim_gset_eq:NN \g_TUDa_innerMargin_dim \g_TUDa_outerMargin_dim
-%\fi
 
 \dim_new:N \g_TUDa_columnSep_dim
 \dim_gset:Nn \g_TUDa_columnSep_dim {10pt}
